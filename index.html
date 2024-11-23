@@ -6,7 +6,6 @@
     <title>蘇的网页</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* 原有样式 */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -14,17 +13,24 @@
             padding: 0;
             background: linear-gradient(135deg, #f4f4f4, #e0e0e0);
             color: #333;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.8);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            z-index: 1;
         }
         header {
             text-align: center;
@@ -36,12 +42,6 @@
         h1 {
             margin: 0;
             font-size: 2.5em;
-        }
-        .time-display {
-            text-align: center;
-            font-size: 1.2em;
-            margin: 20px 0;
-            color: #666;
         }
         .post-container {
             display: flex;
@@ -87,13 +87,6 @@
         .post-title i {
             margin-right: 10px;
         }
-        
-        /* 新增样式 */
-        .centered-name {
-            font-size: 3em;
-            margin: 40px 0;
-            color: #007BFF;
-        }
     </style>
 </head>
 <body>
@@ -101,33 +94,11 @@
         <h1>蘇的网页</h1>
     </header>
     <div class="container">
-        <div class="time-display">
-            <span id="beijing-time">正在加载北京时间...</span>
-        </div>
-        <!-- 新增内容 -->
-        <h1 class="centered-name">张若涵大**</h1>
         <div class="post-container">
             <h2 class="post-title" onclick="location.href='djgl.html'"><i class="fas fa-gamepad"></i>斗技攻略</h2>
             <h2 class="post-title" onclick="location.href='xqswa.html'"><i class="fas fa-pen-nib"></i>星期四文案</h2>
+            <h2 class="post-title" onclick="location.href='grzp.html'"><i class="fas fa-user-edit"></i>个人作品</h2>
         </div>
     </div>
-
-    <script>
-        function getBeijingTime() {
-            const now = new Date();
-            const beijingTime = new Date(now.getTime() + (8 * 60 * 60 * 1000));
-            const year = beijingTime.getFullYear();
-            const month = String(beijingTime.getMonth() + 1).padStart(2, '0');
-            const day = String(beijingTime.getDate()).padStart(2, '0');
-            const hours = String(beijingTime.getHours()).padStart(2, '0');
-            const minutes = String(beijingTime.getMinutes()).padStart(2, '0');
-            const seconds = String(beijingTime.getSeconds()).padStart(2, '0');
-
-            document.getElementById('beijing-time').textContent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-        }
-
-        setInterval(getBeijingTime, 1000);
-        getBeijingTime();
-    </script>
 </body>
 </html>
