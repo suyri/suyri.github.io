@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>斗技攻略</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+        h1 {
+            margin: 0;
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .image-item {
+            flex: 0 0 calc(20% - 20px); /* 每行5个图片，留出10px的间距 */
+            max-width: 150px; /* 固定宽度 */
+            text-align: center;
+        }
+        .image-item img {
+            width: 100%;
+            height: 150px; /* 固定高度 */
+            object-fit: cover; /* 裁剪图片以适应正方形 */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .image-item img:hover {
+            transform: scale(1.1);
+        }
+        .image-item p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #333;
+        }
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        .modal-content {
+            margin: 15% auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">蘇的网页</a></h1>
+    </header>
+    <div class="container">
+        <article>
+            <h2>斗技攻略</h2>
+            <div class="image-container">
+                <div class="image-item">
+                    <img src="images/禅须.jpg" alt="禅须" class="modal-img" data-src="images/禅须.jpg">
+                    <p>禅须</p>
+                </div>
+                <div class="image-item">
+                    <img src="images/禅须9.0.jpg" alt="禅须9.0" class="modal-img" data-src="images/禅须9.0.jpg">
+                    <p>禅须9.0</p>
+                </div>
+                <div class="image-item">
+                    <img src="images/封阳君.jpg" alt="封阳君" class="modal-img" data-src="images/封阳君.jpg">
+                    <p>封阳君</p>
+                </div>
+                <div class="image-item">
+                    <img src="images/祸狐.jpg" alt="祸狐" class="modal-img" data-src="images/祸狐.jpg">
+                    <p>祸狐</p>
+                </div>
+                <div class="image-item">
+                    <img src="images/离吞岚.jpg" alt="离吞岚" class="modal-img" data-src="images/离吞岚.jpg">
+                    <p>离吞岚</p>
+                </div>
+                <div class="image-item">
+                    <img src="images/离言荒.jpg" alt="离言荒" class="modal-img" data-src="images/离言荒.jpg">
+                    <p>离言荒</p>
+                </div>
+                <div class="image-item">
+                    <img src="images/轮椅.jpg" alt="轮椅" class="modal-img" data-src="images/轮椅.jpg">
+                    <p>轮椅</p>
+                </div>
+                <div class="image-item">
+                    <img src="images/千泷.jpg" alt="千泷" class="modal-img" data-src="images/千泷.jpg">
+                    <p>千泷</p>
+                </div>
+                <div class="image-item">
+                    <img src="images/阎须.jpg" alt="阎须" class="modal-img" data-src="images/阎须.jpg">
+                    <p>阎须</p>
+                </div>
+                <div class="image-item">
+                    <img src="images/追禅.jpg" alt="追禅" class="modal-img" data-src="images/追禅.jpg">
+                    <p>追禅</p>
+                </div>
+                <div class="image-item">
+                    <img src="images/追禅吞.jpg" alt="追禅吞" class="modal-img" data-src="images/追禅吞.jpg">
+                    <p>追禅吞</p>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+        <div id="caption"></div>
+    </div>
+
+    <script>
+        // 获取模态框
+        var modal = document.getElementById("myModal");
+
+        // 获取所有带有 modal-img 类的图片
+        var imgs = document.getElementsByClassName('modal-img');
+        var modalImg = document.getElementById("img01");
+        var captionText = document.getElementById("caption");
+
+        // 遍历所有图片，添加点击事件
+        for (var i = 0; i < imgs.length; i++) {
+            imgs[i].onclick = function() {
+                modal.style.display = "block";
+                modalImg.src = this.getAttribute("data-src");
+                captionText.innerHTML = this.alt;
+            }
+        }
+
+        // 获取关闭按钮
+        var span = document.getElementsByClassName("close")[0];
+
+        // 当点击关闭按钮时，关闭模态框
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+    </script>
+</body>
+</html>
