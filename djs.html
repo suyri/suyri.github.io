@@ -3,22 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>多组倒计时器</title>
+<title>折叠多组倒计时器</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif;}
 body{background:#f0f4f8;padding:40px 16px;}
 .wrap{max-width:900px;margin:0 auto;}
 h1{text-align:center;color:#2d3748;margin-bottom:32px;font-size:24px;}
-.group-title{
+
+/*折叠分组头部*/
+.group-header{
+    background:#cbd5e0;
+    border-radius:10px;
+    padding:14px 20px;
+    cursor:pointer;
     font-size:18px;
-    margin:24px 0 12px;
-    color:#4a5568;
+    font-weight:600;
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
+.group-header:hover{background:#b8c2cc;}
+.group-content{
+    overflow:hidden;
+    max-height:0;
+    transition: max-height 0.35s ease;
+}
+.group-content.open{
+    max-height:2000px;
+}
+
 .item{
     background:#fff;
     border-radius:12px;
     padding:20px 24px;
-    margin-bottom:12px;
+    margin:8px 0 12px;
     box-shadow:0 2px 10px rgba(0,0,0,0.07);
     display:flex;
     align-items:center;
@@ -33,7 +52,6 @@ h1{text-align:center;color:#2d3748;margin-bottom:32px;font-size:24px;}
     min-width:130px;
     transition: color 0.3s;
 }
-/* 倒计时结束变色 */
 .time-box.finish{
     color:#e53e3e;
 }
@@ -56,189 +74,222 @@ button:hover{opacity:0.86;}
 <div class="wrap">
     <h1>倒计时工具</h1>
 
-    <!-- 1分钟 ×4个 -->
-    <div class="group-title">1分钟</div>
-    <div class="item">
-        <div class="time-box" id="t0_0">01:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(0,0)">开始</button>
-            <button class="btn-pause" onclick="pause(0,0)">暂停</button>
-            <button class="btn-reset" onclick="reset(0,0)">重新开始</button>
+    <!--1分钟组-->
+    <div class="group-wrap">
+        <div class="group-header" onclick="toggleGroup(0)">
+            <span>1分钟（4个计时器）</span>
+            <span>▼</span>
         </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t0_1">01:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(0,1)">开始</button>
-            <button class="btn-pause" onclick="pause(0,1)">暂停</button>
-            <button class="btn-reset" onclick="reset(0,1)">重新开始</button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t0_2">01:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(0,2)">开始</button>
-            <button class="btn-pause" onclick="pause(0,2)">暂停</button>
-            <button class="btn-reset" onclick="reset(0,2)">重新开始</button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t0_3">01:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(0,3)">开始</button>
-            <button class="btn-pause" onclick="pause(0,3)">暂停</button>
-            <button class="btn-reset" onclick="reset(0,3)">重新开始</button>
-        </div>
-    </div>
-
-    <!-- 2分钟 ×4个 -->
-    <div class="group-title">2分钟</div>
-    <div class="item">
-        <div class="time-box" id="t1_0">02:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(1,0)">开始</button>
-            <button class="btn-pause" onclick="pause(1,0)">暂停</button>
-            <button class="btn-reset" onclick="reset(1,0)">重新开始</button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t1_1">02:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(1,1)">开始</button>
-            <button class="btn-pause" onclick="pause(1,1)">暂停</button>
-            <button class="btn-reset" onclick="reset(1,1)">重新开始</button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t1_2">02:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(1,2)">开始</button>
-            <button class="btn-pause" onclick="pause(1,2)">暂停</button>
-            <button class="btn-reset" onclick="reset(1,2)">重新开始</button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t1_3">02:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(1,3)">开始</button>
-            <button class="btn-pause" onclick="pause(1,3)">暂停</button>
-            <button class="btn-reset" onclick="reset(1,3)">重新开始</button>
+        <div class="group-content" id="g0">
+            <div class="item">
+                <div class="time-box" id="t0_0">01:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(0,0)">开始</button>
+                    <button class="btn-pause" onclick="pause(0,0)">暂停</button>
+                    <button class="btn-reset" onclick="reset(0,0)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t0_1">01:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(0,1)">开始</button>
+                    <button class="btn-pause" onclick="pause(0,1)">暂停</button>
+                    <button class="btn-reset" onclick="reset(0,1)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t0_2">01:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(0,2)">开始</button>
+                    <button class="btn-pause" onclick="pause(0,2)">暂停</button>
+                    <button class="btn-reset" onclick="reset(0,2)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t0_3">01:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(0,3)">开始</button>
+                    <button class="btn-pause" onclick="pause(0,3)">暂停</button>
+                    <button class="btn-reset" onclick="reset(0,3)">重新开始</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!--3分钟 ×4个 -->
-    <div class="group-title">3分钟</div>
-    <div class="item">
-        <div class="time-box" id="t2_0">03:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(2,0)">开始</button>
-            <button class="btn-pause" onclick="pause(2,0)">暂停</button>
-            <button class="btn-reset" onclick="reset(2,0)">重新开始</button>
+    <!--2分钟组-->
+    <div class="group-wrap">
+        <div class="group-header" onclick="toggleGroup(1)">
+            <span>2分钟（4个计时器）</span>
+            <span>▼</span>
         </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t2_1">03:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(2,1)">开始</button>
-            <button class="btn-pause" onclick="pause(2,1)">暂停</button>
-            <button class="btn-reset" onclick="reset(2,1)">重新开始</button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t2_2">03:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(2,2)">开始</button>
-            <button class="btn-pause" onclick="pause(2,2)">暂停</button>
-            <button class="btn-reset" onclick="reset(2,2)">重新开始</button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t2_3">03:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(2,3)">开始</button>
-            <button class="btn-pause" onclick="pause(2,3)">暂停</button>
-            <button class="btn-reset" onclick="reset(2,3)">重新开始</button>
-        </div>
-    </div>
-
-    <!--4分钟 ×4个 -->
-    <div class="group-title">4分钟</div>
-    <div class="item">
-        <div class="time-box" id="t3_0">04:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(3,0)">开始</button>
-            <button class="btn-pause" onclick="pause(3,0)">暂停</button>
-            <button class="btn-reset" onclick="reset(3,0)">重新开始</button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t3_1">04:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(3,1)">开始</button>
-            <button class="btn-pause" onclick="pause(3,1)">暂停</button>
-            <button class="btn-reset" onclick="reset(3,1)">重新开始</button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t3_2">04:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(3,2)">开始</button>
-            <button class="btn-pause" onclick="pause(3,2)">暂停</button>
-            <button class="btn-reset" onclick="reset(3,2)">重新开始</button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t3_3">04:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(3,3)">开始</button>
-            <button class="btn-pause" onclick="pause(3,3)">暂停</button>
-            <button class="btn-reset" onclick="reset(3,3)">重新开始</button>
+        <div class="group-content" id="g1">
+            <div class="item">
+                <div class="time-box" id="t1_0">02:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(1,0)">开始</button>
+                    <button class="btn-pause" onclick="pause(1,0)">暂停</button>
+                    <button class="btn-reset" onclick="reset(1,0)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t1_1">02:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(1,1)">开始</button>
+                    <button class="btn-pause" onclick="pause(1,1)">暂停</button>
+                    <button class="btn-reset" onclick="reset(1,1)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t1_2">02:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(1,2)">开始</button>
+                    <button class="btn-pause" onclick="pause(1,2)">暂停</button>
+                    <button class="btn-reset" onclick="reset(1,2)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t1_3">02:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(1,3)">开始</button>
+                    <button class="btn-pause" onclick="pause(1,3)">暂停</button>
+                    <button class="btn-reset" onclick="reset(1,3)">重新开始</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!--5分钟 ×4个 -->
-    <div class="group-title">5分钟</div>
-    <div class="item">
-        <div class="time-box" id="t4_0">05:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(4,0)">开始</button>
-            <button class="btn-pause" onclick="pause(4,0)">暂停</button>
-            <button class="btn-reset" onclick="reset(4,0)">重新开始</button>
+    <!--3分钟组-->
+    <div class="group-wrap">
+        <div class="group-header" onclick="toggleGroup(2)">
+            <span>3分钟（4个计时器）</span>
+            <span>▼</span>
+        </div>
+        <div class="group-content" id="g2">
+            <div class="item">
+                <div class="time-box" id="t2_0">03:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(2,0)">开始</button>
+                    <button class="btn-pause" onclick="pause(2,0)">暂停</button>
+                    <button class="btn-reset" onclick="reset(2,0)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t2_1">03:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(2,1)">开始</button>
+                    <button class="btn-pause" onclick="pause(2,1)">暂停</button>
+                    <button class="btn-reset" onclick="reset(2,1)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t2_2">03:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(2,2)">开始</button>
+                    <button class="btn-pause" onclick="pause(2,2)">暂停</button>
+                    <button class="btn-reset" onclick="reset(2,2)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t2_3">03:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(2,3)">开始</button>
+                    <button class="btn-pause" onclick="pause(2,3)">暂停</button>
+                    <button class="btn-reset" onclick="reset(2,3)">重新开始</button>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="item">
-        <div class="time-box" id="t4_1">05:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(4,1)">开始</button>
-            <button class="btn-pause" onclick="pause(4,1)">暂停</button>
-            <button class="btn-reset" onclick="reset(4,1)">重新开始</button>
+
+    <!--4分钟组-->
+    <div class="group-wrap">
+        <div class="group-header" onclick="toggleGroup(3)">
+            <span>4分钟（4个计时器）</span>
+            <span>▼</span>
+        </div>
+        <div class="group-content" id="g3">
+            <div class="item">
+                <div class="time-box" id="t3_0">04:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(3,0)">开始</button>
+                    <button class="btn-pause" onclick="pause(3,0)">暂停</button>
+                    <button class="btn-reset" onclick="reset(3,0)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t3_1">04:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(3,1)">开始</button>
+                    <button class="btn-pause" onclick="pause(3,1)">暂停</button>
+                    <button class="btn-reset" onclick="reset(3,1)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t3_2">04:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(3,2)">开始</button>
+                    <button class="btn-pause" onclick="pause(3,2)">暂停</button>
+                    <button class="btn-reset" onclick="reset(3,2)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t3_3">04:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(3,3)">开始</button>
+                    <button class="btn-pause" onclick="pause(3,3)">暂停</button>
+                    <button class="btn-reset" onclick="reset(3,3)">重新开始</button>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="item">
-        <div class="time-box" id="t4_2">05:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(4,2)">开始</button>
-            <button class="btn-pause" onclick="pause(4,2)">暂停</button>
-            <button class="btn-reset" onclick="reset(4,2)">重新开始</button>
+
+    <!--5分钟组-->
+    <div class="group-wrap">
+        <div class="group-header" onclick="toggleGroup(4)">
+            <span>5分钟（4个计时器）</span>
+            <span>▼</span>
         </div>
-    </div>
-    <div class="item">
-        <div class="time-box" id="t4_3">05:00</div>
-        <div class="btns">
-            <button class="btn-start" onclick="start(4,3)">开始</button>
-            <button class="btn-pause" onclick="pause(4,3)">暂停</button>
-            <button class="btn-reset" onclick="reset(4,3)">重新开始</button>
+        <div class="group-content" id="g4">
+            <div class="item">
+                <div class="time-box" id="t4_0">05:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(4,0)">开始</button>
+                    <button class="btn-pause" onclick="pause(4,0)">暂停</button>
+                    <button class="btn-reset" onclick="reset(4,0)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t4_1">05:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(4,1)">开始</button>
+                    <button class="btn-pause" onclick="pause(4,1)">暂停</button>
+                    <button class="btn-reset" onclick="reset(4,1)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t4_2">05:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(4,2)">开始</button>
+                    <button class="btn-pause" onclick="pause(4,2)">暂停</button>
+                    <button class="btn-reset" onclick="reset(4,2)">重新开始</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="time-box" id="t4_3">05:00</div>
+                <div class="btns">
+                    <button class="btn-start" onclick="start(4,3)">开始</button>
+                    <button class="btn-pause" onclick="pause(4,3)">暂停</button>
+                    <button class="btn-reset" onclick="reset(4,3)">重新开始</button>
+                </div>
+            </div>
         </div>
     </div>
 
 </div>
 
 <script>
-// 基础分钟：1,2,3,4,5分钟
 const initSec = [60, 120, 180, 240, 300];
 const countCopy = 4;
 
-// 二维数组 [时间组][第几个副本]
 let remain = [];
 let timers = [];
 for(let g=0;g<5;g++){
@@ -248,6 +299,12 @@ for(let g=0;g<5;g++){
         remain[g][i] = initSec[g];
         timers[g][i] = null;
     }
+}
+
+//折叠展开
+function toggleGroup(gid){
+    const dom = document.getElementById(`g${gid}`);
+    dom.classList.toggle('open');
 }
 
 function fmt(s){
@@ -291,7 +348,7 @@ function reset(g,i){
     render(g,i);
 }
 
-// 全部初始化渲染
+//初始化渲染
 for(let g=0;g<5;g++){
     for(let i=0;i<countCopy;i++){
         render(g,i);
