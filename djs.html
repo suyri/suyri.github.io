@@ -75,9 +75,37 @@
         </div>
     </div>
 
+    <!-- 新增：1分半 90秒 -->
+    <div class="group" data-seconds="90">
+        <div class="group-header">
+            <span>1分半倒计时组</span>
+            <span>▼</span>
+        </div>
+        <div class="group-content">
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+        </div>
+    </div>
+
     <div class="group" data-seconds="120">
         <div class="group-header">
             <span>2分钟倒计时组</span>
+            <span>▼</span>
+        </div>
+        <div class="group-content">
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+        </div>
+    </div>
+
+    <!-- 新增：2分半 150秒 -->
+    <div class="group" data-seconds="150">
+        <div class="group-header">
+            <span>2分半倒计时组</span>
             <span>▼</span>
         </div>
         <div class="group-content">
@@ -101,9 +129,37 @@
         </div>
     </div>
 
+    <!-- 新增：3分半 210秒 -->
+    <div class="group" data-seconds="210">
+        <div class="group-header">
+            <span>3分半倒计时组</span>
+            <span>▼</span>
+        </div>
+        <div class="group-content">
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+        </div>
+    </div>
+
     <div class="group" data-seconds="240">
         <div class="group-header">
             <span>4分钟倒计时组</span>
+            <span>▼</span>
+        </div>
+        <div class="group-content">
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+        </div>
+    </div>
+
+    <!-- 新增：4分半 270秒 -->
+    <div class="group" data-seconds="270">
+        <div class="group-header">
+            <span>4分半倒计时组</span>
             <span>▼</span>
         </div>
         <div class="group-content">
@@ -128,13 +184,12 @@
     </div>
 
 <script>
-// 每个计时器数据，使用时间戳方案，解决手机后台休眠暂停
 class TimerItem {
     constructor(el, totalSec) {
         this.el = el;
         this.totalSec = totalSec;
-        this.startTs = null; // 开始时间戳 ms
-        this.pauseRemain = null; // 暂停时剩余秒数
+        this.startTs = null;
+        this.pauseRemain = null;
         this.isRunning = false;
         this.isEnd = false;
         this.renderHtml();
@@ -212,7 +267,6 @@ class TimerItem {
     }
 }
 
-// 初始化全部计时器
 const allTimers = [];
 document.querySelectorAll('.group').forEach(group=>{
     const total = Number(group.dataset.seconds);
@@ -220,15 +274,13 @@ document.querySelectorAll('.group').forEach(group=>{
     items.forEach(it=>{
         allTimers.push(new TimerItem(it, total));
     });
-    // 折叠展开
     const header = group.querySelector('.group-header');
     const content = group.querySelector('.group-content');
     header.onclick = ()=>{
         content.classList.toggle('open');
-    }
+    };
 });
 
-// 使用requestAnimationFrame循环渲染，切回页面自动校正时间戳
 function loop(){
     allTimers.forEach(t=>t.update());
     requestAnimationFrame(loop);
