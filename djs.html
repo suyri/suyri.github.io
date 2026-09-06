@@ -196,8 +196,7 @@ class TimerItem {
         this.el = el;
         this.uid = "timer_" + idx;
         this.totalSec = totalSec;
-        this.startTs = null;
-        this.pauseRemain = null;
+        this.remainSeconds = totalSec;
         this.isRunning = false;
         this.isEnd = false;
         this.renderHtml();
@@ -229,8 +228,7 @@ class TimerItem {
     saveState(){
         const state = {
             totalSec: this.totalSec,
-            startTs: this.startTs,
-            pauseRemain: this.pauseRemain,
+            remainSeconds: this.remainSeconds,
             isRunning: this.isRunning,
             isEnd: this.isEnd
         };
@@ -240,21 +238,23 @@ class TimerItem {
     loadState(){
         const str = localStorage.getItem(this.uid);
         if(!str) {
-            this.domTime.innerText = this.format(this.totalSec);
+            this.remainSeconds = this.totalSec;
+            this.domTime.innerText = this.format(this.remainSeconds);
             return;
         }
         try{
             const s = JSON.parse(str);
             this.totalSec = s.totalSec;
-            this.startTs = s.startTs;
-            this.pauseRemain = s.pauseRemain;
+            this.remainSeconds = s.remainSeconds;
             this.isRunning = s.isRunning;
             this.isEnd = s.isEnd;
             if(this.isEnd){
                 this.el.classList.add('timer-end');
             }
+            this.domTime.innerText = this.format(this.remainSeconds);
         }catch(e){
-            this.domTime.innerText = this.format(this.totalSec);
+            this.remainSeconds = this.totalSec;
+            this.domTime.innerText = this.format(this.remainSeconds);
         }
     }
 
@@ -262,12 +262,7 @@ class TimerItem {
         if(this.isEnd) return;
         if(!this.isRunning){
             this.isRunning = true;
-            if(this.pauseRemain !== null){
-                this.startTs = Date.now() + this.pauseRemain*1000 - this.totalSec*1000;
-            }else{
-                this.startTs = Date.now();
-            }
-            this.pauseRemain = null;
+            this._startTime = Date.now() - (this.totalSec - this.remainSeconds)*1000;
         }
         this.saveState();
     }
@@ -275,35 +270,30 @@ class TimerItem {
     pause(){
         if(!this.isRunning) return;
         this.isRunning = false;
-        let remain = this.getRemainSeconds();
-        this.pauseRemain = remain;
+        // 暂停时刷新剩余时间
+        const elapsed = (Date.now() - this._startTime)/1000;
+        this.remainSeconds = Math.max(0, this.totalSec - elapsed);
         this.saveState();
     }
 
     reset(){
         this.isRunning = false;
         this.isEnd = false;
-        this.startTs = null;
-        this.pauseRemain = null;
+        this.remainSeconds = this.totalSec;
+        this._startTime = null;
         this.el.classList.remove('timer-end');
-        this.domTime.innerText = this.format(this.totalSec);
-        this.saveState();
-    }
-
-    getRemainSeconds(){
-        if(!this.isRunning){
-            if(this.pauseRemain!==null) return this.pauseRemain;
-            return this.totalSec;
-        }
-        let elapsedMs = Date.now() - this.startTs;
-        let remainMs = this.totalSec*1000 - elapsedMs;
-        return remainMs / 1000;
+        this.domTime.innerText = this.format(this.remainSeconds);
+        localStorage.removeItem(this.uid);
     }
 
     update(){
-        let r = this.getRemainSeconds();
-        this.domTime.innerText = this.format(r);
-        if(r <= 0 && !this.isEnd){
+        if(this.isRunning){
+            const elapsed = (Date.now() - this._startTime)/1000;
+            this.remainSeconds = Math.max(0, this.totalSec - elapsed);
+        }
+        this.domTime.innerText = this.format(this.remainSeconds);
+
+        if(this.remainSeconds <= 0 && !this.isEnd){
             this.isEnd = true;
             this.isRunning = false;
             this.el.classList.add('timer-end');
