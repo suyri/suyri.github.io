@@ -35,7 +35,6 @@
             padding:12px 16px;
             display:none;
         }
-        /* 只有展开的时候才启用两列网格 */
         .group-content.open {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -196,7 +195,8 @@ class TimerItem {
         this.el = el;
         this.uid = "timer_" + idx;
         this.totalSec = totalSec;
-        this.remainSeconds = totalSec;
+        this.remainSeconds = Number(totalSec) || 0;
+        this._startTime = 0;
         this.isRunning = false;
         this.isEnd = false;
         this.renderHtml();
@@ -219,6 +219,8 @@ class TimerItem {
     }
 
     format(s){
+        s = Number(s);
+        if(isNaN(s)) s = 0;
         s = Math.max(0, Math.floor(s));
         let m = Math.floor(s/60);
         let sec = s%60;
@@ -244,10 +246,10 @@ class TimerItem {
         }
         try{
             const s = JSON.parse(str);
-            this.totalSec = s.totalSec;
-            this.remainSeconds = s.remainSeconds;
-            this.isRunning = s.isRunning;
-            this.isEnd = s.isEnd;
+            this.totalSec = Number(s.totalSec)||0;
+            this.remainSeconds = Number(s.remainSeconds)||0;
+            this.isRunning = Boolean(s.isRunning);
+            this.isEnd = Boolean(s.isEnd);
             if(this.isEnd){
                 this.el.classList.add('timer-end');
             }
@@ -269,10 +271,9 @@ class TimerItem {
 
     pause(){
         if(!this.isRunning) return;
-        this.isRunning = false;
-        // 暂停时刷新剩余时间
         const elapsed = (Date.now() - this._startTime)/1000;
         this.remainSeconds = Math.max(0, this.totalSec - elapsed);
+        this.isRunning = false;
         this.saveState();
     }
 
@@ -280,7 +281,7 @@ class TimerItem {
         this.isRunning = false;
         this.isEnd = false;
         this.remainSeconds = this.totalSec;
-        this._startTime = null;
+        this._startTime = 0;
         this.el.classList.remove('timer-end');
         this.domTime.innerText = this.format(this.remainSeconds);
         localStorage.removeItem(this.uid);
