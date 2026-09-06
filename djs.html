@@ -9,49 +9,60 @@
             box-sizing: border-box;
         }
         body {
-            font-family: system-ui;
+            font-family: system-ui, -apple-system, sans-serif;
             padding: 16px;
-            max-width: 700px;
+            max-width: 720px;
             margin: 0 auto;
+            background-color: #fafafa;
         }
         .group {
             border: 1px solid #ccc;
-            margin:10px 0;
+            margin:12px 0;
             border-radius:8px;
             overflow:hidden;
+            background:#fff;
         }
         .group-header {
-            padding:12px 16px;
+            padding:14px 16px;
             background:#f5f5f5;
             cursor:pointer;
             display:flex;
             justify-content:space-between;
             align-items:center;
+            user-select: none;
         }
         .group-content {
             padding:12px 16px;
             display:none;
         }
+        /* 只有展开的时候才启用两列网格 */
         .group-content.open {
-            display:block;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap:12px;
         }
         .timer-item {
-            margin:8px 0;
-            padding:10px;
+            padding:14px;
             border:1px solid #ddd;
-            border-radius:6px;
+            border-radius:8px;
+            margin:0;
         }
         .timer-end {
             background:#ffdddd !important;
             border-color:#f88 !important;
         }
         .time-text {
-            font-size:22px;
-            margin:6px 0;
+            font-size:26px;
+            margin:8px 0;
+            font-weight:500;
         }
         button {
-            padding:6px 10px;
-            margin:2px;
+            padding:10px 14px;
+            margin:3px;
+            font-size:15px;
+            border-radius:6px;
+            border:1px solid #bbb;
+            background:#fff;
         }
         a {
             display:inline-block;
@@ -65,7 +76,7 @@
     <div class="group" data-seconds="60">
         <div class="group-header">
             <span>1分钟倒计时组</span>
-            <span>▼</span>
+            <span class="arrow">▼</span>
         </div>
         <div class="group-content">
             <div class="timer-item"></div>
@@ -75,11 +86,10 @@
         </div>
     </div>
 
-    <!-- 新增：1分半 90秒 -->
     <div class="group" data-seconds="90">
         <div class="group-header">
             <span>1分半倒计时组</span>
-            <span>▼</span>
+            <span class="arrow">▼</span>
         </div>
         <div class="group-content">
             <div class="timer-item"></div>
@@ -92,7 +102,7 @@
     <div class="group" data-seconds="120">
         <div class="group-header">
             <span>2分钟倒计时组</span>
-            <span>▼</span>
+            <span class="arrow">▼</span>
         </div>
         <div class="group-content">
             <div class="timer-item"></div>
@@ -102,11 +112,10 @@
         </div>
     </div>
 
-    <!-- 新增：2分半 150秒 -->
     <div class="group" data-seconds="150">
         <div class="group-header">
             <span>2分半倒计时组</span>
-            <span>▼</span>
+            <span class="arrow">▼</span>
         </div>
         <div class="group-content">
             <div class="timer-item"></div>
@@ -119,7 +128,7 @@
     <div class="group" data-seconds="180">
         <div class="group-header">
             <span>3分钟倒计时组</span>
-            <span>▼</span>
+            <span class="arrow">▼</span>
         </div>
         <div class="group-content">
             <div class="timer-item"></div>
@@ -129,11 +138,10 @@
         </div>
     </div>
 
-    <!-- 新增：3分半 210秒 -->
     <div class="group" data-seconds="210">
         <div class="group-header">
             <span>3分半倒计时组</span>
-            <span>▼</span>
+            <span class="arrow">▼</span>
         </div>
         <div class="group-content">
             <div class="timer-item"></div>
@@ -146,7 +154,7 @@
     <div class="group" data-seconds="240">
         <div class="group-header">
             <span>4分钟倒计时组</span>
-            <span>▼</span>
+            <span class="arrow">▼</span>
         </div>
         <div class="group-content">
             <div class="timer-item"></div>
@@ -156,11 +164,10 @@
         </div>
     </div>
 
-    <!-- 新增：4分半 270秒 -->
     <div class="group" data-seconds="270">
         <div class="group-header">
             <span>4分半倒计时组</span>
-            <span>▼</span>
+            <span class="arrow">▼</span>
         </div>
         <div class="group-content">
             <div class="timer-item"></div>
@@ -173,7 +180,7 @@
     <div class="group" data-seconds="300">
         <div class="group-header">
             <span>5分钟倒计时组</span>
-            <span>▼</span>
+            <span class="arrow">▼</span>
         </div>
         <div class="group-content">
             <div class="timer-item"></div>
@@ -193,6 +200,7 @@ class TimerItem {
         this.isRunning = false;
         this.isEnd = false;
         this.renderHtml();
+        this.domTime.innerText = this.format(this.totalSec);
     }
 
     renderHtml(){
@@ -276,8 +284,10 @@ document.querySelectorAll('.group').forEach(group=>{
     });
     const header = group.querySelector('.group-header');
     const content = group.querySelector('.group-content');
+    const arrow = group.querySelector('.arrow');
     header.onclick = ()=>{
         content.classList.toggle('open');
+        arrow.textContent = content.classList.contains('open') ? '▲' : '▼';
     };
 });
 
@@ -286,6 +296,12 @@ function loop(){
     requestAnimationFrame(loop);
 }
 loop();
+
+document.addEventListener('visibilitychange',()=>{
+    if(!document.hidden){
+        allTimers.forEach(t=>t.update());
+    }
+});
 </script>
 </body>
 </html>
