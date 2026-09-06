@@ -1,360 +1,239 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>折叠多组倒计时器</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif;}
-body{background:#f0f4f8;padding:40px 16px;}
-.wrap{max-width:900px;margin:0 auto;}
-h1{text-align:center;color:#2d3748;margin-bottom:32px;font-size:24px;}
-
-/*折叠分组头部*/
-.group-header{
-    background:#cbd5e0;
-    border-radius:10px;
-    padding:14px 20px;
-    cursor:pointer;
-    font-size:18px;
-    font-weight:600;
-    margin-bottom:8px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-.group-header:hover{background:#b8c2cc;}
-.group-content{
-    overflow:hidden;
-    max-height:0;
-    transition: max-height 0.35s ease;
-}
-.group-content.open{
-    max-height:2000px;
-}
-
-.item{
-    background:#fff;
-    border-radius:12px;
-    padding:20px 24px;
-    margin:8px 0 12px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.07);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:14px;
-}
-.time-box{
-    font-size:34px;
-    font-weight:bold;
-    color:#2b6cb0;
-    min-width:130px;
-    transition: color 0.3s;
-}
-.time-box.finish{
-    color:#e53e3e;
-}
-.btns{display:flex;gap:10px;}
-button{
-    border:none;
-    border-radius:8px;
-    padding:9px 18px;
-    font-size:15px;
-    cursor:pointer;
-    color:#fff;
-}
-.btn-start{background:#3182ce;}
-.btn-pause{background:#ed8936;}
-.btn-reset{background:#718096;}
-button:hover{opacity:0.86;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>倒计时分组</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui;
+            padding: 16px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .group {
+            border: 1px solid #ccc;
+            margin:10px 0;
+            border-radius:8px;
+            overflow:hidden;
+        }
+        .group-header {
+            padding:12px 16px;
+            background:#f5f5f5;
+            cursor:pointer;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+        .group-content {
+            padding:12px 16px;
+            display:none;
+        }
+        .group-content.open {
+            display:block;
+        }
+        .timer-item {
+            margin:8px 0;
+            padding:10px;
+            border:1px solid #ddd;
+            border-radius:6px;
+        }
+        .timer-end {
+            background:#ffdddd !important;
+            border-color:#f88 !important;
+        }
+        .time-text {
+            font-size:22px;
+            margin:6px 0;
+        }
+        button {
+            padding:6px 10px;
+            margin:2px;
+        }
+        a {
+            display:inline-block;
+            margin-bottom:16px;
+        }
+    </style>
 </head>
 <body>
-<div class="wrap">
-  <h1><a href="index.html">蘇的网页</a></h1>
-    <h1>倒计时工具</h1>
+    <a href="./index.html">返回首页 index.html</a>
 
-    <!--1分钟组-->
-    <div class="group-wrap">
-        <div class="group-header" onclick="toggleGroup(0)">
-            <span>1分钟（4个计时器）</span>
+    <div class="group" data-seconds="60">
+        <div class="group-header">
+            <span>1分钟倒计时组</span>
             <span>▼</span>
         </div>
-        <div class="group-content" id="g0">
-            <div class="item">
-                <div class="time-box" id="t0_0">01:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(0,0)">开始</button>
-                    <button class="btn-pause" onclick="pause(0,0)">暂停</button>
-                    <button class="btn-reset" onclick="reset(0,0)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t0_1">01:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(0,1)">开始</button>
-                    <button class="btn-pause" onclick="pause(0,1)">暂停</button>
-                    <button class="btn-reset" onclick="reset(0,1)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t0_2">01:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(0,2)">开始</button>
-                    <button class="btn-pause" onclick="pause(0,2)">暂停</button>
-                    <button class="btn-reset" onclick="reset(0,2)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t0_3">01:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(0,3)">开始</button>
-                    <button class="btn-pause" onclick="pause(0,3)">暂停</button>
-                    <button class="btn-reset" onclick="reset(0,3)">重新开始</button>
-                </div>
-            </div>
+        <div class="group-content">
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
         </div>
     </div>
 
-    <!--2分钟组-->
-    <div class="group-wrap">
-        <div class="group-header" onclick="toggleGroup(1)">
-            <span>2分钟（4个计时器）</span>
+    <div class="group" data-seconds="120">
+        <div class="group-header">
+            <span>2分钟倒计时组</span>
             <span>▼</span>
         </div>
-        <div class="group-content" id="g1">
-            <div class="item">
-                <div class="time-box" id="t1_0">02:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(1,0)">开始</button>
-                    <button class="btn-pause" onclick="pause(1,0)">暂停</button>
-                    <button class="btn-reset" onclick="reset(1,0)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t1_1">02:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(1,1)">开始</button>
-                    <button class="btn-pause" onclick="pause(1,1)">暂停</button>
-                    <button class="btn-reset" onclick="reset(1,1)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t1_2">02:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(1,2)">开始</button>
-                    <button class="btn-pause" onclick="pause(1,2)">暂停</button>
-                    <button class="btn-reset" onclick="reset(1,2)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t1_3">02:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(1,3)">开始</button>
-                    <button class="btn-pause" onclick="pause(1,3)">暂停</button>
-                    <button class="btn-reset" onclick="reset(1,3)">重新开始</button>
-                </div>
-            </div>
+        <div class="group-content">
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
         </div>
     </div>
 
-    <!--3分钟组-->
-    <div class="group-wrap">
-        <div class="group-header" onclick="toggleGroup(2)">
-            <span>3分钟（4个计时器）</span>
+    <div class="group" data-seconds="180">
+        <div class="group-header">
+            <span>3分钟倒计时组</span>
             <span>▼</span>
         </div>
-        <div class="group-content" id="g2">
-            <div class="item">
-                <div class="time-box" id="t2_0">03:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(2,0)">开始</button>
-                    <button class="btn-pause" onclick="pause(2,0)">暂停</button>
-                    <button class="btn-reset" onclick="reset(2,0)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t2_1">03:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(2,1)">开始</button>
-                    <button class="btn-pause" onclick="pause(2,1)">暂停</button>
-                    <button class="btn-reset" onclick="reset(2,1)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t2_2">03:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(2,2)">开始</button>
-                    <button class="btn-pause" onclick="pause(2,2)">暂停</button>
-                    <button class="btn-reset" onclick="reset(2,2)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t2_3">03:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(2,3)">开始</button>
-                    <button class="btn-pause" onclick="pause(2,3)">暂停</button>
-                    <button class="btn-reset" onclick="reset(2,3)">重新开始</button>
-                </div>
-            </div>
+        <div class="group-content">
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
         </div>
     </div>
 
-    <!--4分钟组-->
-    <div class="group-wrap">
-        <div class="group-header" onclick="toggleGroup(3)">
-            <span>4分钟（4个计时器）</span>
+    <div class="group" data-seconds="240">
+        <div class="group-header">
+            <span>4分钟倒计时组</span>
             <span>▼</span>
         </div>
-        <div class="group-content" id="g3">
-            <div class="item">
-                <div class="time-box" id="t3_0">04:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(3,0)">开始</button>
-                    <button class="btn-pause" onclick="pause(3,0)">暂停</button>
-                    <button class="btn-reset" onclick="reset(3,0)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t3_1">04:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(3,1)">开始</button>
-                    <button class="btn-pause" onclick="pause(3,1)">暂停</button>
-                    <button class="btn-reset" onclick="reset(3,1)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t3_2">04:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(3,2)">开始</button>
-                    <button class="btn-pause" onclick="pause(3,2)">暂停</button>
-                    <button class="btn-reset" onclick="reset(3,2)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t3_3">04:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(3,3)">开始</button>
-                    <button class="btn-pause" onclick="pause(3,3)">暂停</button>
-                    <button class="btn-reset" onclick="reset(3,3)">重新开始</button>
-                </div>
-            </div>
+        <div class="group-content">
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
         </div>
     </div>
 
-    <!--5分钟组-->
-    <div class="group-wrap">
-        <div class="group-header" onclick="toggleGroup(4)">
-            <span>5分钟（4个计时器）</span>
+    <div class="group" data-seconds="300">
+        <div class="group-header">
+            <span>5分钟倒计时组</span>
             <span>▼</span>
         </div>
-        <div class="group-content" id="g4">
-            <div class="item">
-                <div class="time-box" id="t4_0">05:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(4,0)">开始</button>
-                    <button class="btn-pause" onclick="pause(4,0)">暂停</button>
-                    <button class="btn-reset" onclick="reset(4,0)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t4_1">05:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(4,1)">开始</button>
-                    <button class="btn-pause" onclick="pause(4,1)">暂停</button>
-                    <button class="btn-reset" onclick="reset(4,1)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t4_2">05:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(4,2)">开始</button>
-                    <button class="btn-pause" onclick="pause(4,2)">暂停</button>
-                    <button class="btn-reset" onclick="reset(4,2)">重新开始</button>
-                </div>
-            </div>
-            <div class="item">
-                <div class="time-box" id="t4_3">05:00</div>
-                <div class="btns">
-                    <button class="btn-start" onclick="start(4,3)">开始</button>
-                    <button class="btn-pause" onclick="pause(4,3)">暂停</button>
-                    <button class="btn-reset" onclick="reset(4,3)">重新开始</button>
-                </div>
-            </div>
+        <div class="group-content">
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
+            <div class="timer-item"></div>
         </div>
     </div>
-
-</div>
 
 <script>
-const initSec = [60, 120, 180, 240, 300];
-const countCopy = 4;
-
-let remain = [];
-let timers = [];
-for(let g=0;g<5;g++){
-    remain[g] = [];
-    timers[g] = [];
-    for(let i=0;i<countCopy;i++){
-        remain[g][i] = initSec[g];
-        timers[g][i] = null;
+// 每个计时器数据，使用时间戳方案，解决手机后台休眠暂停
+class TimerItem {
+    constructor(el, totalSec) {
+        this.el = el;
+        this.totalSec = totalSec;
+        this.startTs = null; // 开始时间戳 ms
+        this.pauseRemain = null; // 暂停时剩余秒数
+        this.isRunning = false;
+        this.isEnd = false;
+        this.renderHtml();
     }
-}
 
-//折叠展开
-function toggleGroup(gid){
-    const dom = document.getElementById(`g${gid}`);
-    dom.classList.toggle('open');
-}
-
-function fmt(s){
-    const m = Math.floor(s / 60);
-    const ss = s % 60;
-    return String(m).padStart(2,'0') + ":" + String(ss).padStart(2,'0');
-}
-
-function render(g,i){
-    const dom = document.getElementById(`t${g}_${i}`);
-    dom.innerText = fmt(remain[g][i]);
-    if(remain[g][i] <= 0){
-        dom.classList.add('finish');
-    }else{
-        dom.classList.remove('finish');
+    renderHtml(){
+        this.el.innerHTML = `
+            <div class="time-text">00:00</div>
+            <div>
+                <button class="btn-start">开始</button>
+                <button class="btn-pause">暂停</button>
+                <button class="btn-reset">重新开始</button>
+            </div>
+        `;
+        this.domTime = this.el.querySelector('.time-text');
+        this.el.querySelector('.btn-start').onclick = ()=>this.start();
+        this.el.querySelector('.btn-pause').onclick = ()=>this.pause();
+        this.el.querySelector('.btn-reset').onclick = ()=>this.reset();
     }
-}
 
-function start(g,i){
-    if(timers[g][i]) return;
-    timers[g][i] = setInterval(()=>{
-        remain[g][i]--;
-        render(g,i);
-        if(remain[g][i] <= 0){
-            clearInterval(timers[g][i]);
-            timers[g][i] = null;
+    format(s){
+        s = Math.max(0, Math.floor(s));
+        let m = Math.floor(s/60);
+        let sec = s%60;
+        return String(m).padStart(2,'0')+":"+String(sec).padStart(2,'0');
+    }
+
+    start(){
+        if(this.isEnd) return;
+        if(!this.isRunning){
+            this.isRunning = true;
+            if(this.pauseRemain !== null){
+                this.startTs = Date.now() + this.pauseRemain*1000 - this.totalSec*1000;
+            }else{
+                this.startTs = Date.now();
+            }
+            this.pauseRemain = null;
         }
-    },1000);
-}
+    }
 
-function pause(g,i){
-    if(timers[g][i]){
-        clearInterval(timers[g][i]);
-        timers[g][i] = null;
+    pause(){
+        if(!this.isRunning) return;
+        this.isRunning = false;
+        let remain = this.getRemainSeconds();
+        this.pauseRemain = remain;
+    }
+
+    reset(){
+        this.isRunning = false;
+        this.isEnd = false;
+        this.startTs = null;
+        this.pauseRemain = null;
+        this.el.classList.remove('timer-end');
+        this.domTime.innerText = this.format(this.totalSec);
+    }
+
+    getRemainSeconds(){
+        if(!this.isRunning){
+            if(this.pauseRemain!==null) return this.pauseRemain;
+            return this.totalSec;
+        }
+        let elapsedMs = Date.now() - this.startTs;
+        let remainMs = this.totalSec*1000 - elapsedMs;
+        return remainMs / 1000;
+    }
+
+    update(){
+        let r = this.getRemainSeconds();
+        this.domTime.innerText = this.format(r);
+        if(r <= 0 && !this.isEnd){
+            this.isEnd = true;
+            this.isRunning = false;
+            this.el.classList.add('timer-end');
+        }
     }
 }
 
-function reset(g,i){
-    pause(g,i);
-    remain[g][i] = initSec[g];
-    render(g,i);
-}
-
-//初始化渲染
-for(let g=0;g<5;g++){
-    for(let i=0;i<countCopy;i++){
-        render(g,i);
+// 初始化全部计时器
+const allTimers = [];
+document.querySelectorAll('.group').forEach(group=>{
+    const total = Number(group.dataset.seconds);
+    const items = group.querySelectorAll('.timer-item');
+    items.forEach(it=>{
+        allTimers.push(new TimerItem(it, total));
+    });
+    // 折叠展开
+    const header = group.querySelector('.group-header');
+    const content = group.querySelector('.group-content');
+    header.onclick = ()=>{
+        content.classList.toggle('open');
     }
+});
+
+// 使用requestAnimationFrame循环渲染，切回页面自动校正时间戳
+function loop(){
+    allTimers.forEach(t=>t.update());
+    requestAnimationFrame(loop);
 }
+loop();
 </script>
 </body>
 </html>
